@@ -1,4 +1,10 @@
 # Wallet Selection Example from SmartPoker.io using Reach.sh on Algorand
+
+## Demo
+The repository is hosted on GitHub Pages at the following URL:
+https://xarmian.github.io/smartpoker_wallet_example/index.html
+
+## Explanation
 This is an all-in-one example website for presenting a Wallet Selection dialog box using Vanilla Javascript with jQuery and Reach.sh.
 
 This example is borrowed from the Cashier system for SmartPoker.io, and demonstrates the following processes:
