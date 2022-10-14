@@ -7,7 +7,7 @@ https://xarmian.github.io/smartpoker_wallet_example/index.html
 ## Explanation
 This is an all-in-one example website for presenting a Wallet Selection dialog box using Vanilla Javascript with jQuery and Reach.sh.
 
-This example is borrowed from the Cashier system for SmartPoker.io, and demonstrates the following processes:
+This example is borrowed from the Cashier system for [SmartPoker.io](https://smartpoker.io), and demonstrates the following processes:
 1. User selection of Wallet (i.e. Pera Wallet, Defly, WalletConnect, MyAlgo)
 2. User selection of alternate node (AlgoNode vs. Algoexplorer)
 3. Store/Restore data in Browser Local Storage, and restoration of app state on website reload
