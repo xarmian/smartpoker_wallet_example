@@ -1,0 +1,430 @@
+<html>
+	<meta charset="UTF-8"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1"/>
+	<meta name="name" content="SmartPoker.io Wallet Connection Example Workflow"/>
+	<title>SmartPoker.io Wallet Example</title>
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css"/>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/js/all.min.js" data-auto-replace-svg="nest"></script>
+	<style>
+	body {
+		margin:0px;
+		background-color:#d9d9d9;
+		-webkit-text-size-adjust: 100%;
+		-webkit-font-smoothing: antialiased;
+	}
+	#main_content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: normal;
+		height:100%;
+	}
+	#wallet_list > div {
+		border:1px solid gray;
+		background-color:white;
+		padding:8px;
+		margin:8px;
+		border-radius:12px;
+		cursor:pointer;
+	}
+	#wallet_list > div:hover {
+		background-color:aliceblue;
+	}
+	#wallet_list > div.mousedown {
+		background-color:aquamarine !important;
+	}
+	.content {
+		height:100%;
+		width:460px;
+		margin:24px;
+	}
+	.icon {
+		height: 20px;
+		width: 20px;
+		background-size: 20px 20px;
+		background-repeat: no-repeat;
+		display:inline-block;
+		margin-right:10px;
+	}
+	.icon_pera {
+		background-image: url(icon_pera.png);
+	}
+	.icon_defly {
+		background-image: url(icon_defly.svg);
+	}
+	.icon_walletconnect {
+		background-image: url(icon_walletconnect.png);
+	}
+	.icon_myalgo {
+		background-image: url(icon_myalgo.png);
+	}
+	.wallet_label {
+		font-size:larger;
+		vertical-align:top;
+	}
+	#main_content > div {
+		display:none;
+	}
+	div:not(.headers).accountinfo {
+		padding:20px 40px 20px 40px;
+	}
+	.wallet_detail {
+		display:flex;
+		flex-direction: column;
+		justify-content:center;
+		margin-bottom:16px;
+	}
+	.wallet_detail div > label {
+		font-weight:bold;
+		width:160px;
+		display:inline-block;
+		text-align:right;
+		margin-right:10px;
+	}
+	.wallet_detail div > span {
+		margin-right:5px;
+	}
+	.wallet_detail .fa-copy, .wallet_detail .fa-plug-circle-xmark, .wallet_detail .fa-arrows-rotate {
+		cursor:pointer;
+	}
+	.toast_msg {
+		position:absolute;
+		background-color:green;
+		color:white;
+		bottom:10;
+		left:50%;
+		text-align:center;
+		padding:10px;
+		border-radius:6px;
+		transform: translate(-50%,0);
+	}
+	.ring {
+		position:absolute;
+		top:50%;
+		left:50%;
+		transform:translate(-50%,-50%);
+		width:150px;
+		height:150px;
+		background:transparent;
+		background-image: url(algorand-logo.png);
+		background-size: 40px 40px;
+		background-position: center;
+		background-repeat: no-repeat;
+		border:3px solid #3c3c3c;
+		border-radius:50%;
+		text-align:center;
+		line-height:150px;
+		font-family:sans-serif;
+		font-size:20px;
+		color:#fff000;
+		letter-spacing:4px;
+		text-transform:uppercase;
+		text-shadow:0 0 10px #fff000;
+		box-shadow:0 0 20px rgba(0,0,0,.5);
+	}
+	.ring:before {
+		content:'';
+		position:absolute;
+		top:-3px;
+		left:-3px;
+		width:100%;
+		height:100%;
+		border:3px solid transparent;
+		border-top:3px solid #fff000;
+		border-right:3px solid #fff000;
+		border-radius:50%;
+		animation:animateC 2s linear infinite;
+	}
+	.ring span {
+		display:block;
+		position:absolute;
+		top:calc(50% - 2px);
+		left:50%;
+		width:50%;
+		height:4px;
+		background:transparent;
+		transform-origin:left;
+		animation:animate 2s linear infinite;
+	}
+	.ring span:before {
+		content:'';
+		position:absolute;
+		width:16px;
+		height:16px;
+		border-radius:50%;
+		background:#fff000;
+		top:-6px;
+		right:-8px;
+		box-shadow:0 0 20px #fff000;
+	}
+	@keyframes animateC {
+		0% {
+			transform:rotate(0deg);
+		}
+		100% {
+			transform:rotate(360deg);
+		}
+	}
+	@keyframes animate {
+		0% {
+			transform:rotate(45deg);
+		}
+		100% {
+			transform:rotate(405deg);
+		}
+	}
+	.warning {
+		color:#D22B2B;
+		text-align: center;
+		margin-bottom:6px;
+	}
+	.link {
+		cursor:pointer;
+		color:blue;
+		text-decoration: underline;
+	}
+	#headers {
+		margin:10px;
+	}
+	#headers > h2 {
+		display:none;
+	}
+	.footers {
+		padding:40px;
+	}
+	</style>
+	<body id="body">
+		<div id="main_content">
+			<div id="headers">
+				<h2 class="wallet_options content" style='text-align:center;'>Connect a Wallet</h2>
+			</div>
+			<div class="wallet_options content">
+				<span>Network Provider:</span>
+				<select id='network_provider'>
+					<option value="Algonode">Algonode</option>
+					<option value="AlgoExplorer">AlgoExplorer</option>
+				</select>
+				<div id='wallet_list'>
+					<div ref="MyAlgo">
+						<span class="icon icon_myalgo"></span>
+						<span class="wallet_label">MyAlgo Wallet</span>
+					</div>						
+					<div ref="Wallet"><!-- use walletconnect, pera doesn't work in this example -->
+						<span class="icon icon_pera"></span>
+						<span class="wallet_label">PeraWallet</span>
+					</div>						
+					<div ref="Defly">
+						<span class="icon icon_defly"></span>
+						<span class="wallet_label">Defly</span>
+					</div>						
+					<div ref="Wallet">
+						<span class="icon icon_walletconnect"></span>
+						<span class="wallet_label">WalletConnect</span>
+					</div>						
+				</div>
+			</div>
+			<div class="accountinfo content">
+				<br/>
+				<div class="card_views">
+					<div>
+						<div class="wallet_detail">
+							<div>
+								<label>Connected Wallet:</label>
+								<span class="disp_wallet_id"></span>
+								<i class="fa fa-copy" title="Copy wallet ID to clipboard"></i>
+								<i class="fa fa-plug-circle-xmark" title="Disconnect Wallet"></i>
+							</div>
+							<div>
+								<label>Wallet Balance:</label>
+								<span class="disp_wallet_balance"></span>
+								<i class="fa fa-arrows-rotate" title="Refresh Balances"></i>
+							</div>
+							<div>
+								<label>Wallet Min Balance:</label>
+								<span class="disp_wallet_minbalance"></span>
+							</div>
+						</div>
+						<br/>
+						<div class="warning"></div>
+					</div>
+				</div>
+			</div>
+			<div class="footers">
+				<div>
+					This is a single page Javascript, jQuery, and Reach example borrowed from <a href='https://smartpoker.io' target="_new">SmartPoker.io</a> to demonstrate initiating a Wallet connection with Algorand. The repository with additional information can be found here:
+					<a href='https://github.com/xarmian/smartpoker_wallet_example' target="_new">https://github.com/xarmian/smartpoker_wallet_example</a>
+				</div>
+			</div>
+		</div>
+		<div class="ring">
+			<span></span>
+		</div>
+	</body>
+	<script type="application/javascript">var exports = {};</script>
+	<script src='https://cdn.jsdelivr.net/npm/@reach-sh/stdlib@0.1.12-rc.2/dist/browser/reachsdk.min.js'></script>
+	<script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
+	<script src='https://code.jquery.com/ui/1.13.2/jquery-ui.min.js'></script>
+	<script>
+	const reachsdk = exports.reachsdk;
+	const providerNetwork = 'TestNet'; // or MainNet
+	let stdlib = reachsdk.loadStdlib('ALGO');	
+
+	let acc = null;
+	let ctc = null;
+
+	const getWallet = (wallet) => {
+		delete window.algorand;
+		stdlib = reachsdk.loadStdlib('ALGO');
+
+		const node = $('#network_provider').val();
+		let provider = '';
+		let wf = null;
+
+		switch(node) {
+			case 'AlgoExplorer':
+				provider = 'randlabs/'+providerNetwork;
+			break;
+			default: // Algonode
+				provider = providerNetwork;
+			break;
+		}
+
+		switch(wallet) {
+			case 'PeraConnect':
+				const PeraConnect = reachsdk[`ALGO_PeraConnect`];
+				wf = stdlib.walletFallback({providerEnv: provider, WalletConnect: PeraConnect});
+			break;
+			case 'WalletConnect':
+			case 'DeflyConnect':
+				const WalletConnect = reachsdk[`ALGO_WalletConnect`];
+				wf = stdlib.walletFallback({providerEnv: provider, WalletConnect});
+			break;
+			case 'MyAlgoConnect':
+				const MyAlgoConnect = reachsdk[`ALGO_MyAlgoConnect`];
+				wf = stdlib.walletFallback({providerEnv: provider, MyAlgoConnect});
+			break;
+		}
+		stdlib.setWalletFallback(wf);
+		console.debug('set wallet fallback: '+wallet);
+	};
+
+	const storeSession = (data) => {
+		localStorage.setItem('wex_acct',JSON.stringify(data));
+		localStorage.setItem('wex_provider',JSON.stringify({
+			id: $('#network_provider').val()
+		}));
+	};
+
+	const restoreSession = async () => {
+		const data = localStorage.getItem('wex_acct');
+		if (!data) {
+			return false;
+		}
+
+		try {
+			const networkProvider = JSON.parse(localStorage.getItem('wex_provider'));
+			if (networkProvider) {
+				$('#network_provider').val(networkProvider.id);
+			}
+		}
+		catch(err) {}
+
+		const dataObj = JSON.parse(data);
+		getWallet(dataObj.connector);
+
+		const addr = dataObj.address;
+		acc = await stdlib.connectAccount({addr});
+	}
+
+	// main app workflow
+	const mainFlow = async () => {
+		console.debug('mainFlow');
+		$('.warning').text('');
+
+		// try to restore wallet session if we don't have an account handle
+		if (!acc) await restoreSession();
+
+		if (acc) {
+			console.debug('has acc');
+
+			const userAddress = stdlib.formatAddress(acc.getAddress());
+			const bal = await stdlib.balanceOf(acc);
+			const minbal = stdlib.bigNumberToNumber(await stdlib.minimumBalanceOf(acc));
+	
+			$('.disp_wallet_id').text(truncateAddr(userAddress)).attr('title',userAddress);
+			$('.disp_wallet_balance').text(stdlib.formatCurrency(bal)+' ALGO');
+			$('.disp_wallet_minbalance').text(stdlib.formatCurrency(minbal)+' ALGO');
+	
+			// show accountinfo view
+			$('.accountinfo').show().siblings('.content').hide();
+			$('.accountinfo .card_views > div').eq(0).show().siblings().hide();
+			$('.wallet_options').hide();
+		}
+		else {
+			// show wallet connect options
+			$('.wallet_options').show().siblings('.content').hide();
+		}
+
+		$('.ring').hide();
+		$('#main_content > div').not('.content').show();
+	};
+
+	const truncateAddr = (addr) => {
+		return addr.substring(0,4)+'...'+addr.substring(addr.length-4);
+	}
+
+	$(function() {
+		$('#wallet_list > div').on('mousedown',function() {
+			$(this).addClass('mousedown');
+		}).on('mouseup',function() {
+			$(this).removeClass('mousedown');
+		}).click(async function() {
+			const connector = $(this).attr('ref')+'Connect';
+			getWallet(connector);
+			acc = await stdlib.getDefaultAccount();
+
+			const addr = stdlib.formatAddress(acc.getAddress());
+			console.debug(`connected address: ${addr}`);
+			storeSession({ address: addr, connector: connector}); // store so we can persist on refresh
+
+			mainFlow();
+		});
+
+		$('.wallet_detail .fa-copy').click(function() {
+			navigator.permissions.query({name: "clipboard-write"}).then((result) => {
+				if (result.state === "granted" || result.state === "prompt") {
+					navigator.clipboard.writeText($('.disp_wallet_id').attr('title'));
+
+					let toastmsg = $('<div class="toast_msg">Wallet ID Copied to Clipboard</div>')
+					toastmsg.appendTo('body');
+
+					setTimeout(function() {
+						$('.toast_msg').fadeOut(1000,function() {
+							$('.toast_msg').remove();
+						});
+					},2000);
+				}
+			});
+		});
+
+		$('#main_content').on('click','.fa-plug-circle-xmark,.reconnect_wallet_btn',function() {
+			ctc = null;
+			acc = null;
+
+			delete window.algorand;
+			stdlib = reachsdk.loadStdlib('ALGO');
+			localStorage.removeItem('wex_acct');
+			localStorage.removeItem('walletconnect');
+			localStorage.removeItem('PeraWallet.Wallet');
+			mainFlow();
+		});
+
+		$('.fa-arrows-rotate').click(function() {
+			$('.disp_wallet_balance').text('...');
+			mainFlow();
+		});
+
+		mainFlow();
+	});
+	</script>
+</html>
