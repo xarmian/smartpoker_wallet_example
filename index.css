@@ -1,0 +1,186 @@
+body {
+		margin:0px;
+		background-color:#d9d9d9;
+		-webkit-text-size-adjust: 100%;
+		-webkit-font-smoothing: antialiased;
+	}
+	#main_content {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: normal;
+		height:100%;
+	}
+	#wallet_list > div {
+		border:1px solid gray;
+		background-color:white;
+		padding:8px;
+		margin:8px;
+		border-radius:12px;
+		cursor:pointer;
+	}
+	#wallet_list > div:hover {
+		background-color:aliceblue;
+	}
+	#wallet_list > div.mousedown {
+		background-color:aquamarine !important;
+	}
+	.content {
+		height:100%;
+		width:460px;
+		margin:24px;
+	}
+	.icon {
+		height: 20px;
+		width: 20px;
+		background-size: 20px 20px;
+		background-repeat: no-repeat;
+		display:inline-block;
+		margin-right:10px;
+	}
+	.icon_pera {
+		background-image: url(icon_pera.png);
+	}
+	.icon_defly {
+		background-image: url(icon_defly.svg);
+	}
+	.icon_walletconnect {
+		background-image: url(icon_walletconnect.png);
+	}
+	.icon_myalgo {
+		background-image: url(icon_myalgo.png);
+	}
+	.wallet_label {
+		font-size:larger;
+		vertical-align:top;
+	}
+	#main_content > div {
+		display:none;
+	}
+	div:not(.headers).accountinfo {
+		padding:20px 40px 20px 40px;
+	}
+	.wallet_detail {
+		display:flex;
+		flex-direction: column;
+		justify-content:center;
+		margin-bottom:16px;
+	}
+	.wallet_detail div > label {
+		font-weight:bold;
+		width:160px;
+		display:inline-block;
+		text-align:right;
+		margin-right:10px;
+	}
+	.wallet_detail div > span {
+		margin-right:5px;
+	}
+	.wallet_detail .fa-copy, .wallet_detail .fa-plug-circle-xmark, .wallet_detail .fa-arrows-rotate {
+		cursor:pointer;
+	}
+	.toast_msg {
+		position:absolute;
+		background-color:green;
+		color:white;
+		bottom:10;
+		left:50%;
+		text-align:center;
+		padding:10px;
+		border-radius:6px;
+		transform: translate(-50%,0);
+	}
+	.ring {
+		position:absolute;
+		top:50%;
+		left:50%;
+		transform:translate(-50%,-50%);
+		width:150px;
+		height:150px;
+		background:transparent;
+		background-image: url(algorand-logo.png);
+		background-size: 40px 40px;
+		background-position: center;
+		background-repeat: no-repeat;
+		border:3px solid #3c3c3c;
+		border-radius:50%;
+		text-align:center;
+		line-height:150px;
+		font-family:sans-serif;
+		font-size:20px;
+		color:#fff000;
+		letter-spacing:4px;
+		text-transform:uppercase;
+		text-shadow:0 0 10px #fff000;
+		box-shadow:0 0 20px rgba(0,0,0,.5);
+	}
+	.ring:before {
+		content:'';
+		position:absolute;
+		top:-3px;
+		left:-3px;
+		width:100%;
+		height:100%;
+		border:3px solid transparent;
+		border-top:3px solid #fff000;
+		border-right:3px solid #fff000;
+		border-radius:50%;
+		animation:animateC 2s linear infinite;
+	}
+	.ring span {
+		display:block;
+		position:absolute;
+		top:calc(50% - 2px);
+		left:50%;
+		width:50%;
+		height:4px;
+		background:transparent;
+		transform-origin:left;
+		animation:animate 2s linear infinite;
+	}
+	.ring span:before {
+		content:'';
+		position:absolute;
+		width:16px;
+		height:16px;
+		border-radius:50%;
+		background:#fff000;
+		top:-6px;
+		right:-8px;
+		box-shadow:0 0 20px #fff000;
+	}
+	@keyframes animateC {
+		0% {
+			transform:rotate(0deg);
+		}
+		100% {
+			transform:rotate(360deg);
+		}
+	}
+	@keyframes animate {
+		0% {
+			transform:rotate(45deg);
+		}
+		100% {
+			transform:rotate(405deg);
+		}
+	}
+	.warning {
+		color:#D22B2B;
+		text-align: center;
+		margin-bottom:6px;
+	}
+	.link {
+		cursor:pointer;
+		color:blue;
+		text-decoration: underline;
+	}
+	#headers {
+		margin:10px;
+	}
+	#headers > h2 {
+		display:none;
+	}
+	.footers {
+		padding:40px;
+	}
