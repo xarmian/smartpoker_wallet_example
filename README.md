@@ -19,10 +19,12 @@ This example is intended to be used by loading the index.html file directly in a
 ## Technical Details
 In order to use with Pera Wallet's native connector, browserify and esmify were used to create a bundle of the @perawallet/connect library. While the Reach (@reach-sh/stdlib) library does not require this, it is included in the bundle for simplicity. This bundle, named `bundle.js` is created as follows, and included using `<script>` tags:
 
-```npm install -g browserify
+```
+npm install -g browserify
 npm install --save-dev esmify
 npm install @reach-sh/stdlib @perawallet/connect
-browserify -p esmify -r @perawallet/connect -r @reach-sh/stdlib > bundle.js```
+browserify -p esmify -r @perawallet/connect -r @reach-sh/stdlib > bundle.js
+```
 
 The example also uses jQuery/jQuery-UI and Font Awesome, which are loaded from CDNs.
 
