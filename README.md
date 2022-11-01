@@ -1,4 +1,4 @@
-# Wallet Selection Example from SmartPoker.io using Reach.sh and Algorand
+# Wallet Selection/Connect Example using Reach.sh on Algorand
 
 ## Demo
 The repository is hosted on GitHub Pages at the following URL:
