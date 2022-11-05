@@ -30,6 +30,10 @@
 						<span class="icon icon_defly"></span>
 						<span class="wallet_label">Defly</span>
 					</div>
+					<div ref="AlgoSigner">
+						<span class="icon icon_algosigner"></span>
+						<span class="wallet_label">AlgoSigner</span>
+					</div>						
 					<div ref="Wallet">
 						<span class="icon icon_walletconnect"></span>
 						<span class="wallet_label">WalletConnect</span>
@@ -76,6 +80,7 @@
 	<script src='https://code.jquery.com/jquery-3.6.0.min.js'></script>
 	<script src='https://code.jquery.com/ui/1.13.2/jquery-ui.min.js'></script>
 	<script src='./bundle.js'></script>
+	<script src="./ALGO_MakeAlgoSignerConnect.js"></script>
 	<script>
 	const reachsdk = require('@reach-sh/stdlib');
 	const providerNetwork = 'TestNet'; // or MainNet
@@ -116,6 +121,9 @@
 			case 'MyAlgoConnect':
 				const MyAlgoConnect = reachsdk[`ALGO_MyAlgoConnect`];
 				wf = stdlib.walletFallback({providerEnv: provider, MyAlgoConnect});
+			break;
+			case 'AlgoSignerConnect':
+				wf = stdlib.walletFallback({providerEnv: provider, MyAlgoConnect: MakeAlgoSignerConnect(AlgoSigner,provider)});
 			break;
 		}
 		stdlib.setWalletFallback(wf);
